@@ -6,7 +6,6 @@ resource "aws_cloudwatch_log_group" "lambda_check_grafana" {
   skip_destroy      = false
 }
 
-
 resource "aws_iam_policy" "cloud_watch_write" { # Rename
   description = null
   name        = "AWSLambdaBasicExecutionRole-b13e47b2-b69a-46ed-8ab7-e421560eec6f"
@@ -24,6 +23,4 @@ resource "aws_iam_policy" "cloud_watch_write" { # Rename
     }]
     Version = "2012-10-17"
   })
-  tags     = {}
-  tags_all = {}
 }

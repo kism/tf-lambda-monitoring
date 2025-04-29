@@ -19,7 +19,6 @@ resource "aws_iam_role" "check_grafana" {
   #   managed_policy_arns   = [aws_iam_policy.cloud_watch_write.arn, aws_iam_policy.sns_topic_write.arn]
 }
 
-
 resource "aws_iam_role_policy_attachment" "cloud_watch_write_grafana" {
   role       = aws_iam_role.check_grafana.name
   policy_arn = aws_iam_policy.cloud_watch_write.arn
