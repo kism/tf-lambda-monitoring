@@ -35,3 +35,20 @@ resource "aws_sns_topic_subscription" "kg_kism_email" {
   raw_message_delivery = false
   topic_arn            = aws_sns_topic.kg_homelab_alerts.arn
 }
+
+resource "aws_iam_policy" "sns_topic_write" { # Rename
+  description = null
+  name        = "AWSLambdaSNSTopicDestinationExecutionRole-cfd4e103-33bc-47e2-a8e6-7d75fc101dab"
+  name_prefix = null
+  path        = "/service-role/"
+  policy = jsonencode({
+    Statement = [{
+      Action   = "sns:Publish"
+      Effect   = "Allow"
+      Resource = aws_sns_topic.kg_homelab_alerts.arn
+    }]
+    Version = "2012-10-17"
+  })
+  tags     = {}
+  tags_all = {}
+}
