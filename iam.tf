@@ -1,8 +1,3 @@
-import {
-  to = aws_iam_role.check_grafana
-  id = "CheckGrafana-role-bgihua7g"
-}
-
 resource "aws_iam_role" "check_grafana" {
   assume_role_policy = jsonencode({
     Statement = [{
@@ -21,30 +16,16 @@ resource "aws_iam_role" "check_grafana" {
   name_prefix           = null
   path                  = "/service-role/"
   permissions_boundary  = null
-  tags                  = {}
-  tags_all              = {}
+  #   managed_policy_arns   = [aws_iam_policy.cloud_watch_write.arn, aws_iam_policy.sns_topic_write.arn]
 }
 
 
+resource "aws_iam_role_policy_attachment" "cloud_watch_write_grafana" {
+  role       = aws_iam_role.check_grafana.name
+  policy_arn = aws_iam_policy.cloud_watch_write.arn
+}
 
-
-resource "aws_iam_policy" "cloud_watch_write" { # Rename
-  description = null
-  name        = "AWSLambdaBasicExecutionRole-b13e47b2-b69a-46ed-8ab7-e421560eec6f"
-  name_prefix = null
-  path        = "/service-role/"
-  policy = jsonencode({
-    Statement = [{
-      Action   = "logs:CreateLogGroup"
-      Effect   = "Allow"
-      Resource = "arn:aws:logs:${var.region}:${var.kism_account_id}:*"
-      }, {
-      Action   = ["logs:CreateLogStream", "logs:PutLogEvents"]
-      Effect   = "Allow"
-      Resource = ["arn:aws:logs:${var.region}:${var.kism_account_id}:log-group:/aws/lambda/CheckGrafana:*"]
-    }]
-    Version = "2012-10-17"
-  })
-  tags     = {}
-  tags_all = {}
+resource "aws_iam_role_policy_attachment" "sns_topic_write_grafana" {
+  role       = aws_iam_role.check_grafana.name
+  policy_arn = aws_iam_policy.sns_topic_write.arn
 }
