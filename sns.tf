@@ -28,3 +28,10 @@ resource "aws_sns_topic" "kg_homelab_alerts" {
   tags_all       = {}
   tracing_config = "PassThrough"
 }
+
+resource "aws_sns_topic_subscription" "kg_kism_email" {
+  endpoint             = var.kism_email
+  protocol             = "email"
+  raw_message_delivery = false
+  topic_arn            = aws_sns_topic.kg_homelab_alerts.arn
+}

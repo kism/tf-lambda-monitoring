@@ -8,3 +8,7 @@ variable "kism_account_id" {
   default = "471112518165"
 }
 
+variable "kism_email" {
+  type    = string
+  default = "kieran.lost.the.game@gmail.com"
+}
