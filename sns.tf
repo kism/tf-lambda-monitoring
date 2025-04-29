@@ -1,5 +1,5 @@
 locals {
-  sns_topic_name = "kg-homelab-alerts"
+  sns_topic_name = "kg_monitoring_sns_homelab_alerts"
 }
 
 resource "aws_sns_topic" "kg_homelab_alerts" {
@@ -8,7 +8,16 @@ resource "aws_sns_topic" "kg_homelab_alerts" {
   policy = jsonencode({
     Id = "__default_policy_ID"
     Statement = [{
-      Action = ["SNS:GetTopicAttributes", "SNS:SetTopicAttributes", "SNS:AddPermission", "SNS:RemovePermission", "SNS:DeleteTopic", "SNS:Subscribe", "SNS:ListSubscriptionsByTopic", "SNS:Publish"]
+      Action = [
+        "SNS:GetTopicAttributes",
+        "SNS:SetTopicAttributes",
+        "SNS:AddPermission",
+        "SNS:RemovePermission",
+        "SNS:DeleteTopic",
+        "SNS:Subscribe",
+        "SNS:ListSubscriptionsByTopic",
+        "SNS:Publish"
+      ]
       Condition = {
         StringEquals = {
           "AWS:SourceOwner" = var.kism_account_id
@@ -38,7 +47,7 @@ resource "aws_sns_topic_subscription" "kg_kism_email" {
 
 resource "aws_iam_policy" "sns_topic_write" { # Rename
   description = null
-  name        = "AWSLambdaSNSTopicDestinationExecutionRole-cfd4e103-33bc-47e2-a8e6-7d75fc101dab"
+  name        = "kg_monitoring_cloudwatch_sns_topic_write"
   name_prefix = null
   path        = "/service-role/"
   policy = jsonencode({

@@ -1,4 +1,4 @@
-resource "aws_iam_role" "check_grafana" {
+resource "aws_iam_role" "check_web" {
   assume_role_policy = jsonencode({
     Statement = [{
       Action = "sts:AssumeRole"
@@ -12,7 +12,7 @@ resource "aws_iam_role" "check_grafana" {
   description           = null
   force_detach_policies = false
   max_session_duration  = 3600
-  name                  = "CheckGrafana-role-bgihua7g"
+  name                  = "check_web_lambda"
   name_prefix           = null
   path                  = "/service-role/"
   permissions_boundary  = null
@@ -20,11 +20,11 @@ resource "aws_iam_role" "check_grafana" {
 }
 
 resource "aws_iam_role_policy_attachment" "cloud_watch_write_grafana" {
-  role       = aws_iam_role.check_grafana.name
+  role       = aws_iam_role.check_web.name
   policy_arn = aws_iam_policy.cloud_watch_write.arn
 }
 
 resource "aws_iam_role_policy_attachment" "sns_topic_write_grafana" {
-  role       = aws_iam_role.check_grafana.name
+  role       = aws_iam_role.check_web.name
   policy_arn = aws_iam_policy.sns_topic_write.arn
 }
