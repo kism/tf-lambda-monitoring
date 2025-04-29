@@ -1,7 +1,7 @@
 data "archive_file" "check_grafana_lambda" {
   type        = "zip"
-  source_file = "${path.module}/lambda/grafana/lambda_function.py"
-  output_path = "${path.module}/lambda/grafana/lambda_function_payload.zip"
+  source_file = "${path.module}/lambda_check_web/lambda_function.py"
+  output_path = "${path.module}/lambda_check_web/lambda_function_payload.zip"
 }
 
 resource "aws_lambda_function" "check_grafana" {
