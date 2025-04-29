@@ -20,7 +20,7 @@ resource "aws_iam_policy" "cloud_watch_write" { # Rename
       }, {
       Action   = ["logs:CreateLogStream", "logs:PutLogEvents"]
       Effect   = "Allow"
-      Resource = ["arn:aws:logs:${var.region}:${var.kism_account_id}:log-group:/aws/lambda/CheckGrafana:*"]
+      Resource = ["arn:aws:logs:${var.region}:${var.kism_account_id}:log-group:${aws_cloudwatch_log_group.lambda_check_grafana.name}:*"]
     }]
     Version = "2012-10-17"
   })
