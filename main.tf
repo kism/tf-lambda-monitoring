@@ -14,12 +14,12 @@ terraform {
     use_lockfile = true
     key          = "base/terraform.tfstate"
     region       = "ap-southeast-2"
-    profile      = "kism"
+    # profile      = "kism"
   }
 }
 
 provider "aws" {
-  profile             = "kism"
+  # profile             = "kism"
   region              = var.region
   allowed_account_ids = [var.kism_account_id]
   default_tags {
