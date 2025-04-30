@@ -24,3 +24,22 @@ resource "aws_iam_policy" "cloud_watch_write" { # Rename
     Version = "2012-10-17"
   })
 }
+
+resource "aws_cloudwatch_metric_alarm" "kg_homelab_alert" {
+  actions_enabled     = true
+  alarm_actions       = [aws_sns_topic.kg_homelab_alerts.arn]
+  alarm_description   = "Hello, grafana.kierangee.au appears to be down."
+  alarm_name          = "grafana_is_down"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  datapoints_to_alarm = 1
+  dimensions = {
+    FunctionName = "kg_web_monitoring"
+  }
+  evaluation_periods = 1
+  metric_name        = "Errors"
+  namespace          = "AWS/Lambda"
+  period             = 3600
+  statistic          = "Sum"
+  threshold          = 1
+  treat_missing_data = "missing"
+}
