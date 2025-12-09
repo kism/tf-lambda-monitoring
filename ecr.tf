@@ -45,6 +45,7 @@ data "aws_iam_policy_document" "github_ecr_policy" {
       "ecr:InitiateLayerUpload",
       "ecr:UploadLayerPart",
       "ecr:CompleteLayerUpload",
+      "ecr:BatchGetImage",
       "ecr:PutImage"
     ]
     resources = [
