@@ -36,3 +36,11 @@ resource "aws_lambda_function" "check_web" {
     mode = "PassThrough"
   }
 }
+
+resource "aws_lambda_permission" "allow_eventbridge" {
+  statement_id  = "AllowExecutionFromEventBridge"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.check_web.function_name
+  principal     = "events.amazonaws.com"
+  source_arn    = aws_cloudwatch_event_rule.check_web_hourly.arn
+}
