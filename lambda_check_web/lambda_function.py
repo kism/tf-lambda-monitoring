@@ -1,5 +1,9 @@
 import os
 import urllib3
+import logging 
+
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
 
 SITE = os.environ['site']  # URL of the site to check, stored in the site environment variable
 
@@ -12,9 +16,14 @@ def lambda_handler(event, context):
     response = http.request('GET', SITE, timeout=10.0)
 
     if response.status == 200:
+        msg = f'URL {SITE} returned {response.status} status code'
+        logger.info(msg)
         return {
             'statusCode': 200,
-            'body': f'URL {SITE} returned {response.status} status code'
+            'body': msg
         }
+        
     else:
-        raise Exception(f"Grafana website is broken? Code: {response.status}")
+        msg = f"{SITE} website is broken? Code: {response.status}"
+        logger.error(msg)
+        raise Exception(msg)
