@@ -19,7 +19,7 @@ resource "aws_lambda_function" "check_web" {
   package_type     = "Zip"
   role             = aws_iam_role.check_web.arn
   runtime          = "python3.13"
-  timeout          = 15
+  timeout          = 30
   environment {
     variables = {
       site = "https://grafana.kierangee.au/api/health"
