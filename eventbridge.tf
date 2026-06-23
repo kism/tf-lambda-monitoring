@@ -1,17 +1,15 @@
-data "aws_cloudwatch_event_bus" "default" {
-  name = "default"
-}
+resource "aws_scheduler_schedule" "check_web_hourly" {
+  name = "kg_monitoring_check_web_hourly"
 
-resource "aws_cloudwatch_event_rule" "check_web_hourly" {
-  description         = "Rule to run Lambda function every hour"
-  event_bus_name      = data.aws_cloudwatch_event_bus.default.name
-  name                = "kg_monitoring_check_web_hourly"
+  flexible_time_window {
+    mode                      = "FLEXIBLE"
+    maximum_window_in_minutes = 30
+  }
+
   schedule_expression = "rate(1 hour)"
-  state               = "ENABLED"
-}
 
-resource "aws_cloudwatch_event_target" "check_web" {
-  arn            = aws_lambda_function.check_web.arn
-  event_bus_name = data.aws_cloudwatch_event_bus.default.name
-  rule           = aws_cloudwatch_event_rule.check_web_hourly.name
+  target {
+    arn      = aws_lambda_function.check_web.arn
+    role_arn = aws_iam_role.scheduler_check_web.arn
+  }
 }

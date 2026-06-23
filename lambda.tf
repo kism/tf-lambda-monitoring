@@ -19,7 +19,7 @@ resource "aws_lambda_function" "check_web" {
   package_type     = "Zip"
   role             = aws_iam_role.check_web.arn
   runtime          = "python3.13"
-  timeout          = 10
+  timeout          = 15
   environment {
     variables = {
       site = "https://grafana.kierangee.au/api/health"
@@ -41,6 +41,6 @@ resource "aws_lambda_permission" "allow_eventbridge" {
   statement_id  = "AllowExecutionFromEventBridge"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.check_web.function_name
-  principal     = "events.amazonaws.com"
-  source_arn    = aws_cloudwatch_event_rule.check_web_hourly.arn
+  principal     = "scheduler.amazonaws.com"
+  source_arn    = aws_scheduler_schedule.check_web_hourly.arn
 }

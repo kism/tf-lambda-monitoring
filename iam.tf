@@ -19,6 +19,32 @@ resource "aws_iam_role" "check_web" {
   #   managed_policy_arns   = [aws_iam_policy.cloud_watch_write.arn, aws_iam_policy.sns_topic_write.arn]
 }
 
+resource "aws_iam_role" "scheduler_check_web" {
+  name = "scheduler_check_web"
+  assume_role_policy = jsonencode({
+    Statement = [{
+      Action = "sts:AssumeRole"
+      Effect = "Allow"
+      Principal = {
+        Service = "scheduler.amazonaws.com"
+      }
+    }]
+    Version = "2012-10-17"
+  })
+}
+
+resource "aws_iam_role_policy" "scheduler_check_web" {
+  role = aws_iam_role.scheduler_check_web.id
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect   = "Allow"
+      Action   = "lambda:InvokeFunction"
+      Resource = aws_lambda_function.check_web.arn
+    }]
+  })
+}
+
 resource "aws_iam_role_policy_attachment" "cloud_watch_write_grafana" {
   role       = aws_iam_role.check_web.name
   policy_arn = aws_iam_policy.cloud_watch_write.arn
