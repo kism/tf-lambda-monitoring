@@ -18,7 +18,8 @@ logger.setLevel(logging.INFO)
 for log_handler in logger.handlers:
     log_handler.setFormatter(logging.Formatter("[%(levelname)s] %(message)s"))
 
-http = urllib3.PoolManager()
+WORKERS = 8
+http = urllib3.PoolManager(maxsize=WORKERS)  # one pooled conn per worker per host
 
 
 class CheckFailedError(Exception):
@@ -39,16 +40,16 @@ def check(item):
     try:
         status = http.request("GET", url, timeout=10.0, retries=False, redirect=False).status
     except urllib3.exceptions.HTTPError as e:
-        return f"{url} expected {expect}, request failed: {e}"
+        return f"✗ {url} expected {expect}, request failed: {e}"
     msg = f"{url} expected {expect}, got {status}"
     if is_ok(expect, status):
-        logger.info(msg)
+        logger.info(f"✓ {msg}")
         return None
-    return msg
+    return f"✗ {msg}"
 
 
 def lambda_handler(event, context):
-    with ThreadPoolExecutor(max_workers=8) as pool:
+    with ThreadPoolExecutor(max_workers=WORKERS) as pool:
         failures = [f for f in pool.map(check, CHECKS.items()) if f]
 
     if failures:

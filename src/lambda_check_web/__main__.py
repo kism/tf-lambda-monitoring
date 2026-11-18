@@ -1,3 +1,4 @@
+import logging
 import sys
 
 
@@ -8,6 +9,8 @@ def main():
         load_dotenv()
     except ImportError:
         pass  # optional: `uv run --extra dotenv check-web`
+
+    logging.basicConfig()  # Lambda provides a handler, local runs need one
 
     # Imported after load_dotenv, lambda_function reads env at import time
     from .lambda_function import CheckFailedError, is_ok, lambda_handler

@@ -29,9 +29,9 @@ resource "aws_lambda_function" "check_web" {
         "https://hs.kierangee.au/health"          = "open"
         "https://hs.kierangee.au/admin/"          = "open"
         "https://kierangee.au/"                   = "open"
-        "https://homeassistant.kierangee.au/"     = "open"
-        "https://jf.kierangee.au/"                = "open"
-        "https://jsee.kierangee.au/"              = "open"
+        "https://homeassistant.kierangee.au/"     = "blocked"
+        "https://jf.kierangee.au/"                = "blocked"
+        "https://jsee.kierangee.au/"              = "blocked"
         "https://grafana.kierangee.au/"           = "blocked"
         "https://grafana.kierangee.au/api/live/"  = "blocked"
         "https://kierangee.au/private/"           = "blocked"
@@ -40,7 +40,6 @@ resource "aws_lambda_function" "check_web" {
         "https://qbt.kierangee.au/"               = "blocked"
         "https://stream.kierangee.au/"            = "blocked"
         "https://vic.kierangee.au/"               = "blocked"
-        "https://wazuh.kierangee.au/"             = "blocked"
       })
     }
   }
