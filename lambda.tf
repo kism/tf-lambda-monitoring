@@ -4,8 +4,8 @@ locals {
 
 data "archive_file" "check_web_lambda" {
   type        = "zip"
-  source_file = "${path.module}/lambda_check_web/lambda_function.py"
-  output_path = "${path.module}/lambda_check_web/lambda_function_payload.zip"
+  source_file = "${path.module}/src/lambda_check_web/lambda_function.py"
+  output_path = "${path.module}/src/lambda_check_web/lambda_function_payload.zip"
 }
 
 resource "aws_lambda_function" "check_web" {
@@ -18,11 +18,30 @@ resource "aws_lambda_function" "check_web" {
   memory_size      = 128
   package_type     = "Zip"
   role             = aws_iam_role.check_web.arn
-  runtime          = "python3.13"
-  timeout          = 30
+  runtime          = "python3.15"
+  timeout          = 90
   environment {
     variables = {
-      site = "https://grafana.kierangee.au/api/health"
+      # From nginx_exposure on rproxy. Lambda runs in ap-southeast-2, so "geofence OR allowlist" = open.
+      checks = jsonencode({
+        "https://auth.kierangee.au/"              = "open"
+        "https://grafana.kierangee.au/api/health" = "open"
+        "https://hs.kierangee.au/health"          = "open"
+        "https://hs.kierangee.au/admin/"          = "open"
+        "https://kierangee.au/"                   = "open"
+        "https://homeassistant.kierangee.au/"     = "open"
+        "https://jf.kierangee.au/"                = "open"
+        "https://jsee.kierangee.au/"              = "open"
+        "https://grafana.kierangee.au/"           = "blocked"
+        "https://grafana.kierangee.au/api/live/"  = "blocked"
+        "https://kierangee.au/private/"           = "blocked"
+        "https://myr.kierangee.au/"               = "blocked"
+        "https://opnsense.kierangee.au/"          = "blocked"
+        "https://qbt.kierangee.au/"               = "blocked"
+        "https://stream.kierangee.au/"            = "blocked"
+        "https://vic.kierangee.au/"               = "blocked"
+        "https://wazuh.kierangee.au/"             = "blocked"
+      })
     }
   }
   ephemeral_storage {

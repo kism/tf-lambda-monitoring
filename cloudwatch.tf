@@ -28,8 +28,8 @@ resource "aws_iam_policy" "cloud_watch_write" { # Rename
 resource "aws_cloudwatch_metric_alarm" "kg_homelab_alert" {
   actions_enabled     = true
   alarm_actions       = [aws_sns_topic.kg_homelab_alerts.arn]
-  alarm_description   = "Hello, grafana.kierangee.au appears to be down."
-  alarm_name          = "grafana_is_down"
+  alarm_description   = "Hello, a kierangee.au exposure check failed, see the kg_web_monitoring lambda logs."
+  alarm_name          = "web_check_failed"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   datapoints_to_alarm = 1
   dimensions = {

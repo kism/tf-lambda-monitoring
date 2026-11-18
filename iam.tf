@@ -45,12 +45,23 @@ resource "aws_iam_role_policy" "scheduler_check_web" {
   })
 }
 
-resource "aws_iam_role_policy_attachment" "cloud_watch_write_grafana" {
+resource "aws_iam_role_policy_attachment" "cloud_watch_write_check_web" {
   role       = aws_iam_role.check_web.name
   policy_arn = aws_iam_policy.cloud_watch_write.arn
 }
 
-resource "aws_iam_role_policy_attachment" "sns_topic_write_grafana" {
+resource "aws_iam_role_policy_attachment" "sns_topic_write_check_web" {
   role       = aws_iam_role.check_web.name
   policy_arn = aws_iam_policy.sns_topic_write.arn
+}
+
+# ponytail: delete these once applied
+moved {
+  from = aws_iam_role_policy_attachment.cloud_watch_write_grafana
+  to   = aws_iam_role_policy_attachment.cloud_watch_write_check_web
+}
+
+moved {
+  from = aws_iam_role_policy_attachment.sns_topic_write_grafana
+  to   = aws_iam_role_policy_attachment.sns_topic_write_check_web
 }

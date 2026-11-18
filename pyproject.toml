@@ -1,0 +1,18 @@
+[project]
+name = "lambda-check-web"
+version = "0.1.0"
+requires-python = "==3.15.*" # match runtime in lambda.tf
+dependencies = [
+    "python-dotenv>=1.2.4",
+    "urllib3>=2", # bundled in the Lambda runtime (via botocore), not shipped in the zip
+]
+
+[project.optional-dependencies]
+dotenv = ["python-dotenv>=1.2.4"] # local runs only, loads .env in __main__
+
+[project.scripts]
+check-web = "lambda_check_web.__main__:main"
+
+[build-system]
+requires = ["uv_build>=0.13.9,<0.14"]
+build-backend = "uv_build"
